@@ -1,25 +1,31 @@
-version: '3.8'
-
+version: "3.8"
 services:
   db:
-    build:
-      context: .
-      dockerfile: Dockerfile # Caminho para o Dockerfile
+    image: mysql:8
+    container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: root_password # Senha do usuário root
-      MYSQL_DATABASE: L5-networks # Nome do banco de dados
-      MYSQL_USER: user # Nome do usuário para o banco de dados
-      MYSQL_PASSWORD: user_password # Senha do usuário
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: L5-networks
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql # Persistência dos dados
     networks:
-      - app_network
+      - mynetwork
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
 
 networks:
-  app_network:
+  mynetwork:
     driver: bridge
-
-volumes:
-  db_data:
