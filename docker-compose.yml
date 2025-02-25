@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile # Caminho para o Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password # Senha do usuário root
+      MYSQL_DATABASE: L5-networks # Nome do banco de dados
+      MYSQL_USER: user # Nome do usuário para o banco de dados
+      MYSQL_PASSWORD: user_password # Senha do usuário
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql # Persistência dos dados
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  db_data:
