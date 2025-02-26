@@ -115,4 +115,19 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
             'produtos' => $produtos
         ];
     }
+    public function mostrarUm($id)
+    {
+        $produto = $this->buscarProdutoPorId($id);
+        if (!$produto) {
+            return [
+                'message' => "Produto não encontrado",
+                'statusCode' => 404
+            ];
+        }
+        return [
+            'message' => 'Produto',
+            'statusCode' => 200,
+            'produtos' => $produto
+        ];
+    }
 }

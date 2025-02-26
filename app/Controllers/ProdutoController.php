@@ -56,4 +56,15 @@ class ProdutoController extends BaseController
             ])->setStatusCode(500);
         }
     }
+    public function mostrarUm($id)
+    {
+        try {
+            $resposta = $this->produtoRepository->mostrarUm($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao remover produto: ' . $e->getMessage(),
+            ])->setStatusCode(500);
+        }
+    }
 }

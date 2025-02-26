@@ -8,4 +8,5 @@ interface ProdutoRepositoriesInterface
     public function adicionarProduto(array $dados);
     public function removerProduto(int $id);
     public function mostrarTodos();
+    public function mostrarUm($id);
 }
