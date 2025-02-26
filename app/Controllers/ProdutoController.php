@@ -29,7 +29,19 @@ class ProdutoController extends BaseController
             return $this->response->setJSON([
                 'message' => 'Erro ao criar produto: ' . $e->getMessage(),
                 'statusCode' => 500
-            ]);
+            ])->setStatusCode(500);
+        }
+    }
+
+    public function removerProduto($id)
+    {
+        try {
+            $resposta = $this->produtoRepository->removerProduto($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao remover produto: ' . $e->getMessage(),
+            ])->setStatusCode(500);
         }
     }
 }

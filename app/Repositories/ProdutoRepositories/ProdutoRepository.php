@@ -18,6 +18,26 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         $this->validation = \Config\Services::validation();
     }
 
+    /**
+     * Busca um produto por seu ID
+     * 
+     * @param int $id
+     * 
+     * @return array
+     */
+    public function buscarProdutoPorId(int $id)
+    {
+        return $this->db->table('produtos')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+    }
+
+    /**
+     * Adiciona um produto
+     * @param array $dados
+     * @return array{erro: string, message: string, statusCode: int|array{erro: string[], message: string, statusCode: int}|array{message: string, produto: int|string, statusCode: int}}
+     */
     public function adicionarProduto(array $dados)
     {
         // Define as regras e mensagens de validação
@@ -52,6 +72,35 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
             'message' => 'Produto criado com sucesso!',
             'statusCode' => 200,
             'produto' => $this->db->insertID() // Retorna o ID do produto inserido
+        ];
+    }
+
+    /**
+     * Remove um produto
+     * 
+     * @param int $id
+     * @return array{message: string, statusCode: int}
+     */
+    public function removerProduto(int $id)
+    {
+        $produto = $this->buscarProdutoPorId($id);
+        if (!$produto) {
+            return [
+                'message' => 'Produto não encontrado !',
+                'statusCode' => 404
+            ];
+        }
+
+        if (!$this->db->table('produtos')->where('id', $id)->delete()) {
+            return [
+                'message' => 'Erro ao remover produto, verifique novamente !',
+                'statusCode' => 400
+            ];
+        }
+
+        return [
+            'message' => 'Produto removido com sucesso!',
+            'statusCode' => 200
         ];
     }
 }
