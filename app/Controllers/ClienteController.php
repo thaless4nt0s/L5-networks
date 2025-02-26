@@ -27,7 +27,7 @@ class ClienteController extends BaseController
 
             if ($cliente) {
                 return $this->response->setJSON([
-                    'message' => 'Clente criado com sucesso!',
+                    'message' => 'Cliente criado com sucesso!',
                     'statusCode' => 201, // Usar 201 para criação bem-sucedida
                 ]);
             }
@@ -55,7 +55,20 @@ class ClienteController extends BaseController
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao criar cliente: ' . $e->getMessage(),
+                'message' => 'Erro ao alterar cliente: ' . $e->getMessage(),
+                'statusCode' => 500
+            ]);
+        }
+    }
+
+    public function removerCliente($id)
+    {
+        try {
+            $resposta = $this->clienteRepository->removerCliente($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao remover cliente: ' . $e->getMessage(),
                 'statusCode' => 500
             ]);
         }

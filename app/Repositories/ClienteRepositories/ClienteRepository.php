@@ -87,4 +87,31 @@ class ClienteRepository implements ClienteRepositoryInterface
             'cliente' => $this->buscarClientePorId($id)
         ];
     }
+
+    public function removerCliente(int $id)
+    {
+        // Busca o cliente pelo ID
+        $cliente = $this->buscarClientePorId($id);
+
+        // Verifica se o cliente existe
+        if (!$cliente) {
+            return [
+                'erro' => 'Erro ao atualizar cliente',
+                'message' => 'Cliente não encontrado',
+                'statusCode' => 404
+            ];
+        }
+
+        if (!$this->db->table('clientes')->where('id', $id)->delete()) {
+            return [
+                'message' => 'Erro ao remover cliente, verifique novamente !',
+                'statusCode' => 400
+            ];
+        }
+
+        return [
+            'message' => 'Cliente removido com sucesso!',
+            'statusCode' => 200
+        ];
+    }
 }
