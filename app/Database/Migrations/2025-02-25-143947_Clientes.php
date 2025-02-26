@@ -10,8 +10,8 @@ class Clientes extends Migration
     {
         $this->forge->addField([
             'cpf' => [
-                'type' => 'INT',
-                'auto_increment' => true,
+                'type' => 'VARCHAR',
+                'constraint' => '11'
             ],
             'nome' => [
                 'type' => 'VARCHAR',
