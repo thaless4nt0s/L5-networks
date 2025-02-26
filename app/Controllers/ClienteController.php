@@ -73,4 +73,17 @@ class ClienteController extends BaseController
             ]);
         }
     }
+
+    public function mostrarTodos()
+    {
+        try {
+            $resposta = $this->clienteRepository->mostrarTodos();
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao exibir clientes: ' . $e->getMessage(),
+                'statusCode' => 500
+            ]);
+        }
+    }
 }

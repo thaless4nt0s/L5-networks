@@ -15,4 +15,5 @@ $routes->group('clientes', function ($routes) {
     $routes->post('', 'ClienteController::adicionarCliente');
     $routes->put('(:num)', 'ClienteController::alterarCliente/$1');
     $routes->delete('(:num)', 'ClienteController::removerCliente/$1');
+    $routes->get('', 'ClienteController::mostrarTodos');
 });

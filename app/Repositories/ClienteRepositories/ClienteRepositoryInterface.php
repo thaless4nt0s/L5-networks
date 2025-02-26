@@ -8,6 +8,7 @@ interface ClienteRepositoryInterface
     public function adicionarCliente(array $dados);
     public function alterarCliente(int $id, array $dados);
     public function removerCliente(int $id);
+    public function mostrarTodos();
 }
 
 ?>

@@ -88,6 +88,11 @@ class ClienteRepository implements ClienteRepositoryInterface
         ];
     }
 
+    /**
+     * 
+     * @param int $id
+     * @return array{erro: string, message: string, statusCode: int|array{message: string, statusCode: int}}
+     */
     public function removerCliente(int $id)
     {
         // Busca o cliente pelo ID
@@ -112,6 +117,17 @@ class ClienteRepository implements ClienteRepositoryInterface
         return [
             'message' => 'Cliente removido com sucesso!',
             'statusCode' => 200
+        ];
+    }
+
+    public function mostrarTodos()
+    {
+        $clientes = $this->db->table('clientes')->get()->getResultArray();
+
+        return [
+            'message' => 'Listagem de clientes',
+            'statusCode' => 200,
+            'clientes' => $clientes
         ];
     }
 }
