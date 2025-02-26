@@ -75,6 +75,43 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         ];
     }
 
+    public function alterarProduto(int $id, array $dados)
+    {
+        $produto = $this->buscarProdutoPorId($id);
+
+        if (!$produto) {
+            return [
+                'message' => 'Produto não encontrado',
+                'statusCode' => 404
+            ];
+        }
+        // Define as regras e mensagens de validação
+        $this->validation->setRules(
+            $this->produtoModel->validationRules, // Regras de validação
+            $this->produtoModel->validationMessages // Mensagens de erro personalizadas
+        );
+
+        // Executa a validação
+        if (!$this->validation->run($dados)) {
+            return [
+                'message' => 'Erro de validação',
+                'erro' => $this->validation->getErrors(),
+                'statusCode' => 400
+            ];
+        }
+
+        $this->db->table('produtos')->where('id', $id)->update($dados);
+
+        $produtoAtualizado = $this->buscarProdutoPorId($id);
+
+        // Retorna uma mensagem de sucesso
+        return [
+            'message' => 'Produto atualizado com sucesso!',
+            'statusCode' => 200,
+            'produto' => $produtoAtualizado // Retorna o ID do produto inserido
+        ];
+    }
+
     /**
      * Remove um produto
      * 
@@ -104,7 +141,10 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         ];
     }
 
-
+    /**
+     * Lista todos os produtos
+     * @return array{message: string, produtos: array, statusCode: int}
+     */
     public function mostrarTodos()
     {
         $produtos = $this->db->table('produtos')->get()->getResultArray();
@@ -115,6 +155,11 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
             'produtos' => $produtos
         ];
     }
+    /**
+     * Retorna um produto
+     * @param mixed $id
+     * @return array{message: string, produtos: array, statusCode: int|array{message: string, statusCode: int}}
+     */
     public function mostrarUm($id)
     {
         $produto = $this->buscarProdutoPorId($id);

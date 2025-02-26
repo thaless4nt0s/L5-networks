@@ -33,6 +33,24 @@ class ProdutoController extends BaseController
         }
     }
 
+    public function alterarProduto($id)
+    {
+        $dados = [
+            'nome' => $this->request->getVar('nome'),
+            'valor' => $this->request->getVar('valor'),
+        ];
+
+        try {
+            $resposta = $this->produtoRepository->alterarProduto($id, $dados);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao criar produto: ' . $e->getMessage(),
+                'statusCode' => 500
+            ])->setStatusCode(500);
+        }
+    }
+
     public function removerProduto($id)
     {
         try {
@@ -67,4 +85,5 @@ class ProdutoController extends BaseController
             ])->setStatusCode(500);
         }
     }
+
 }

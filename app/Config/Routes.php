@@ -21,6 +21,7 @@ $routes->group('clientes', function ($routes) {
 
 $routes->group('produtos', function ($routes) {
     $routes->post('', 'ProdutoController::adicionarProduto');
+    $routes->put('(:num)', 'ProdutoController::alterarProduto/$1');
     $routes->delete('(:num)', 'ProdutoController::removerProduto/$1');
     $routes->get('', 'ProdutoController::mostrarTodos');
     $routes->get('(:num)', 'ProdutoController::mostrarUm/$1');
