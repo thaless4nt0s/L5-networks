@@ -103,4 +103,16 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
             'statusCode' => 200
         ];
     }
+
+
+    public function mostrarTodos()
+    {
+        $produtos = $this->db->table('produtos')->get()->getResultArray();
+
+        return [
+            'message' => 'Listagem de produtos',
+            'statusCode' => 200,
+            'produtos' => $produtos
+        ];
+    }
 }
