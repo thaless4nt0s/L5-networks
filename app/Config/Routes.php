@@ -13,4 +13,5 @@ $routes->group('admin/', function ($routes) {
 
 $routes->group('clientes', function ($routes) {
     $routes->post('', 'ClienteController::adicionarCliente');
+    $routes->put('(:num)', 'ClienteController::alterarCliente/$1');
 });

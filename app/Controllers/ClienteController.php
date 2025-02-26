@@ -33,9 +33,26 @@ class ClienteController extends BaseController
             }
 
             return $this->response->setJSON([
-                'message' => 'Falha ao criar administrador',
+                'message' => 'Falha ao criar cliente',
                 'statusCode' => 500 // Usar 500 para erros internos do servidor
             ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao criar cliente: ' . $e->getMessage(),
+                'statusCode' => 500
+            ]);
+        }
+    }
+
+    public function alterarCliente($id)
+    {
+        $dados = [
+            'cpf' => $this->request->getVar('cpf'),
+            'nome' => $this->request->getVar('nome')
+        ];
+        try {
+            $resposta = $this->clienteRepository->alterarCliente($id, $dados);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'message' => 'Erro ao criar cliente: ' . $e->getMessage(),

@@ -29,7 +29,7 @@ class ClienteModel extends Model
 
     // Validation
     protected $validationRules = [
-        'cpf' => 'required|min_length[11]|max_length[11]|is_unique',
+        'cpf' => 'required|min_length[11]|max_length[11]',
         'nome' => 'required'
     ];
     protected $validationMessages = [
