@@ -18,3 +18,7 @@ $routes->group('clientes', function ($routes) {
     $routes->get('', 'ClienteController::mostrarTodos');
     $routes->get('(:num)', 'ClienteController::mostrarUm/$1');
 });
+
+$routes->group('produtos', function ($routes) {
+    $routes->post('', 'ProdutoController::adicionarProduto');
+});
