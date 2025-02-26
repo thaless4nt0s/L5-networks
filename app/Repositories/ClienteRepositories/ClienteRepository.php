@@ -89,6 +89,7 @@ class ClienteRepository implements ClienteRepositoryInterface
     }
 
     /**
+     * Remover um cliente
      * 
      * @param int $id
      * @return array{erro: string, message: string, statusCode: int|array{message: string, statusCode: int}}
@@ -101,7 +102,7 @@ class ClienteRepository implements ClienteRepositoryInterface
         // Verifica se o cliente existe
         if (!$cliente) {
             return [
-                'erro' => 'Erro ao atualizar cliente',
+                'erro' => 'Erro ao Remover cliente',
                 'message' => 'Cliente não encontrado',
                 'statusCode' => 404
             ];
@@ -120,6 +121,10 @@ class ClienteRepository implements ClienteRepositoryInterface
         ];
     }
 
+    /**
+     * Mostrar todos os clientes
+     * @return array{clientes: array, message: string, statusCode: int}
+     */
     public function mostrarTodos()
     {
         $clientes = $this->db->table('clientes')->get()->getResultArray();
@@ -128,6 +133,24 @@ class ClienteRepository implements ClienteRepositoryInterface
             'message' => 'Listagem de clientes',
             'statusCode' => 200,
             'clientes' => $clientes
+        ];
+    }
+
+    public function mostrarUm($id)
+    {
+        $cliente = $this->buscarClientePorId($id);
+        if (!$cliente) {
+            return [
+                'erro' => 'Erro ao encontrar cliente',
+                'message' => 'Cliente não encontrado',
+                'statusCode' => 404
+            ];
+        }
+
+        return [
+            'message' => 'Dados do cliente',
+            'statusCode' => 200,
+            'cliente' => $cliente
         ];
     }
 }

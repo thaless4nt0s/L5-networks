@@ -86,4 +86,17 @@ class ClienteController extends BaseController
             ]);
         }
     }
+
+    public function mostrarUm($id)
+    {
+        try {
+            $resposta = $this->clienteRepository->mostrarUm($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao exibir clientes: ' . $e->getMessage(),
+                'statusCode' => 500
+            ]);
+        }
+    }
 }

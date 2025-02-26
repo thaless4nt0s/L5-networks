@@ -16,4 +16,5 @@ $routes->group('clientes', function ($routes) {
     $routes->put('(:num)', 'ClienteController::alterarCliente/$1');
     $routes->delete('(:num)', 'ClienteController::removerCliente/$1');
     $routes->get('', 'ClienteController::mostrarTodos');
+    $routes->get('(:num)', 'ClienteController::mostrarUm/$1');
 });

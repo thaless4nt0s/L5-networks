@@ -9,6 +9,7 @@ interface ClienteRepositoryInterface
     public function alterarCliente(int $id, array $dados);
     public function removerCliente(int $id);
     public function mostrarTodos();
+    public function mostrarUm(int $id);
 }
 
 ?>
