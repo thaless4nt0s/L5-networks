@@ -31,7 +31,6 @@ class PedidosDeCompraCompraModel extends Model
     protected $validationRules = [
         'dia' => 'required|valid_date', // Data válida
         'quantidade' => 'required|integer|greater_than[0]', // Número inteiro maior que 0
-        'valor_compra' => 'required|decimal|greater_than[0]', // Número decimal maior que 0
         'idCliente' => 'required|integer|is_not_unique[clientes.id]', // Deve existir na tabela clientes
         'idProduto' => 'required|integer|is_not_unique[produtos.id]', // Deve existir na tabela produtos
         'status' => 'required|in_list[Em aberto,Pago,Cancelado]', // Valor permitido
@@ -46,11 +45,6 @@ class PedidosDeCompraCompraModel extends Model
             'required' => 'O campo Quantidade é obrigatório.',
             'integer' => 'O campo Quantidade deve ser um número inteiro.',
             'greater_than' => 'O campo Quantidade deve ser maior que 0.'
-        ],
-        'valor_compra' => [
-            'required' => 'O campo Valor da Compra é obrigatório.',
-            'decimal' => 'O campo Valor da Compra deve ser um número decimal.',
-            'greater_than' => 'O campo Valor da Compra deve ser maior que 0.'
         ],
         'idCliente' => [
             'required' => 'O campo ID do Cliente é obrigatório.',

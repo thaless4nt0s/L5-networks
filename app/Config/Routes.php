@@ -26,3 +26,7 @@ $routes->group('produtos', function ($routes) {
     $routes->get('', 'ProdutoController::mostrarTodos');
     $routes->get('(:num)', 'ProdutoController::mostrarUm/$1');
 });
+
+$routes->group('pedidosDeCompra', function ($routes) {
+    $routes->post('', 'PedidosDeComprasController::adicionarPedidoDeCompra');
+});
