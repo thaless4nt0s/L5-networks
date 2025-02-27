@@ -29,4 +29,5 @@ $routes->group('produtos', function ($routes) {
 
 $routes->group('pedidosDeCompra', function ($routes) {
     $routes->post('', 'PedidosDeComprasController::adicionarPedidoDeCompra');
+    $routes->put('(:num)', 'PedidosDeComprasController::alterarPedidoDeCompra/$1');
 });

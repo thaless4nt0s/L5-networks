@@ -25,6 +25,21 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         $this->clienteRepository = new ClienteRepository();
     }
 
+    /**
+     * Retorna um pedido de compra buscando pelo seu ID
+     * @param int $id
+     * @return array|null
+     */
+    public function buscarPedidoDeCompraPorId(int $id)
+    {
+        return $this->db->table('pedidos_de_compra')->where('id', $id)->get()->getRowArray();
+    }
+
+    /**
+     * Adicionar pedido de compra
+     * @param array $dados
+     * @return array{erro: string, message: string, statusCode: int|array{erro: string[], message: string, statusCode: int}|array{message: string, statusCode: int}|array{Message: string, statusCode: int}}
+     */
     public function adicionarPedidoDeCompra(array $dados)
     {
         $cliente = $this->clienteRepository->buscarClientePorId($dados['idCliente']);
@@ -61,7 +76,7 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
 
         // Tenta inserir os dados no banco de dados
         try {
-            $dados['valor_compra'] = number_format($dados['quantidade'] * $produto['valor'], 2, ',', '.');
+            $dados['valor_compra'] = round($dados['quantidade'] * $produto['valor'], 2);
             $this->db->table('pedidos_de_compra')->insert($dados);
             return [
                 'Message' => 'Pedido Adicionado com Sucesso',
@@ -71,6 +86,72 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
             return [
                 'message' => 'Erro ao adicionar pedido',
+                'erro' => $e->getMessage(),
+                'statusCode' => 500
+            ];
+        }
+    }
+
+    /**
+     * Alterar o pedido de uma compra
+     * @param int $id
+     * @param array $dados
+     * @return array{erro: string, message: string, statusCode: int|array{erro: string[], message: string, statusCode: int}|array{message: string, statusCode: int}|array{Message: string, statusCode: int}}
+     */
+    public function alterarPedidoDeCompra(int $id, array $dados)
+    {
+        $pedido = $this->buscarPedidoDeCompraPorId($id);
+        if (!$pedido) {
+            return [
+                'message' => 'Pedido não encontrado !',
+                'statusCode' => 404
+            ];
+        }
+
+        $cliente = $this->clienteRepository->buscarClientePorId($dados['idCliente']);
+        if (!$cliente) {
+            return [
+                'message' => 'Cliente Não encontrado !',
+                'statusCode' => 404
+            ];
+        }
+
+        $produto = $this->produtoRepository->buscarProdutoPorId($dados['idProduto']);
+        if (!$produto) {
+            return [
+                'message' => 'Produto Não encontrado !',
+                'statusCode' => 404
+            ];
+        }
+
+        // Define as regras e mensagens de validação
+        $this->validation->setRules(
+            $this->pedidosDeComprasModel->getValidationRules(), // Regras de validação
+            $this->pedidosDeComprasModel->getValidationMessages() // Mensagens de erro personalizadas
+        );
+
+        // Executa a validação
+        if (!$this->validation->run($dados)) {
+            return [
+                'message' => 'Erro de validação',
+                'erro' => $this->validation->getErrors(),
+                'statusCode' => 400
+            ];
+        }
+
+        try {
+            $dados['valor_compra'] = round($dados['quantidade'] * $produto['valor'], 2);
+            $this->db->table('pedidos_de_compra')
+                ->where('id', $id)
+                ->update($dados);
+            return [
+                'Message' => 'Pedido atualizado com Sucesso !',
+                'statusCode' => 200
+            ];
+        } catch (\Exception $e) {
+            // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
+            return [
+                'message' => 'Erro ao alterar pedido',
                 'erro' => $e->getMessage(),
                 'statusCode' => 500
             ];

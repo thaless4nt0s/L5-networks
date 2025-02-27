@@ -35,4 +35,24 @@ class PedidosDeComprasController extends BaseController
         }
     }
 
+    public function alterarPedidoDeCompra($id)
+    {
+        $dados = [
+            'dia' => $this->request->getVar('dia'), // Correção da formatação da data
+            'quantidade' => $this->request->getVar('quantidade'),
+            'idCliente' => $this->request->getVar('idCliente'),
+            'idProduto' => $this->request->getVar('idProduto'),
+            'status' => $this->request->getVar('status') // Sempre passará 'Em aberto' quando se adiciona um pedido
+        ];
+
+        try {
+            $resposta = $this->pedidosDeCompraRepository->alterarPedidoDeCompra($id, $dados);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao atualizar pedido de compra: ' . $e->getMessage(),
+                'statusCode' => 500
+            ])->setStatusCode(500);
+        }
+    }
 }
