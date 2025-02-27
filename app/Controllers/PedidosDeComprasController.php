@@ -68,4 +68,17 @@ class PedidosDeComprasController extends BaseController
             ])->setStatusCode(500);
         }
     }
+
+    public function mostrarTodos()
+    {
+        try {
+            $resposta = $this->pedidosDeCompraRepository->mostrarTodos();
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao exibir pedidos de compras: ' . $e->getMessage(),
+                'statusCode' => 500
+            ])->setStatusCode(500);
+        }
+    }
 }

@@ -193,4 +193,18 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             ];
         }
     }
+
+    /**
+     * Mostrar todas os pedidos de compras
+     * @return array{PedidosDeCompras: array, message: string, statusCode: int}
+     */
+    public function mostrarTodos()
+    {
+        $pedidos = $this->db->table('pedidos_de_compra')->get()->getResultArray();
+        return [
+            'message' => 'Listagem de pedidos',
+            'statusCode' => 200,
+            'PedidosDeCompras' => $pedidos
+        ];
+    }
 }
