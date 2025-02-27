@@ -42,7 +42,6 @@
 **PUT** `/clientes/:idCliente`
 
 - **Descrição**: Endpoint responsável por atualizar um cliente.
-- **Autenticação**: Necessário.
 
 **Query**:
 
