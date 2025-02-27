@@ -17,47 +17,71 @@ class ClienteController extends BaseController
 
     public function adicionarCliente()
     {
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+
         $dados = [
-            'cpf' => $this->request->getVar('cpf'),
-            'nome' => $this->request->getVar('nome')
+            'cpf' => $input['parametros']['cpf'] ?? null,
+            'nome' => $input['parametros']['nome'] ?? null
         ];
 
         try {
-            $cliente = $this->clienteRepository->adicionarCliente($dados);
-
-            if ($cliente) {
-                return $this->response->setJSON([
-                    'message' => 'Cliente criado com sucesso!',
-                    'statusCode' => 201, // Usar 201 para criação bem-sucedida
-                ]);
-            }
-
-            return $this->response->setJSON([
-                'message' => 'Falha ao criar cliente',
-                'statusCode' => 500 // Usar 500 para erros internos do servidor
-            ]);
+            $resposta = $this->clienteRepository->adicionarCliente($dados);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao criar cliente: ' . $e->getMessage(),
-                'statusCode' => 500
-            ]);
+            return $this->response->setJSON(
+                [
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao criar cliente ' . $e->getMessage(),
+                        'status' => 500,
+                    ],
+                    'retorno' => null
+                ]
+            );
         }
     }
 
     public function alterarCliente($id)
     {
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+
         $dados = [
-            'cpf' => $this->request->getVar('cpf'),
-            'nome' => $this->request->getVar('nome')
+            'cpf' => $input['parametros']['cpf'] ?? null,
+            'nome' => $input['parametros']['nome'] ?? null
         ];
+
         try {
             $resposta = $this->clienteRepository->alterarCliente($id, $dados);
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao alterar cliente: ' . $e->getMessage(),
-                'statusCode' => 500
-            ]);
+            return $this->response->setJSON(
+                [
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao alterar cliente ' . $e->getMessage(),
+                        'status' => 500,
+                    ],
+                    'retorno' => null
+                ]
+            );
         }
     }
 
@@ -67,10 +91,15 @@ class ClienteController extends BaseController
             $resposta = $this->clienteRepository->removerCliente($id);
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao remover cliente: ' . $e->getMessage(),
-                'statusCode' => 500
-            ]);
+            return $this->response->setJSON(
+                [
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao remover cliente ' . $e->getMessage(),
+                        'status' => 500,
+                    ],
+                    'retorno' => null
+                ]
+            );
         }
     }
 
@@ -80,10 +109,15 @@ class ClienteController extends BaseController
             $resposta = $this->clienteRepository->mostrarTodos();
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao exibir clientes: ' . $e->getMessage(),
-                'statusCode' => 500
-            ]);
+            return $this->response->setJSON(
+                [
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao exibir clientes ' . $e->getMessage(),
+                        'status' => 500,
+                    ],
+                    'retorno' => null
+                ]
+            );
         }
     }
 
@@ -93,10 +127,15 @@ class ClienteController extends BaseController
             $resposta = $this->clienteRepository->mostrarUm($id);
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao exibir clientes: ' . $e->getMessage(),
-                'statusCode' => 500
-            ]);
+            return $this->response->setJSON(
+                [
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao exibir cliente ' . $e->getMessage(),
+                        'status' => 500,
+                    ],
+                    'retorno' => null
+                ]
+            );
         }
     }
 }
