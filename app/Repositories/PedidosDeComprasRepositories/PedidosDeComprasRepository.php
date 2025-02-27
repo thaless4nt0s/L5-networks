@@ -32,7 +32,14 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
      */
     public function buscarPedidoDeCompraPorId(int $id)
     {
-        return $this->db->table('pedidos_de_compra')->where('id', $id)->get()->getRowArray();
+        return $pedido = $this->db->table('pedidos_de_compra')
+            ->select('pedidos_de_compra.*, clientes.nome AS nomeCliente, produtos.nome AS nomeProduto, produtos.valor as valorProdutoIndividual')
+            ->join('clientes', 'clientes.id = pedidos_de_compra.idCliente')
+            ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto')
+            ->where('pedidos_de_compra.id', $id)
+            ->get()
+            ->getRowArray();
+        ;
     }
 
     /**
@@ -200,11 +207,31 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
      */
     public function mostrarTodos()
     {
-        $pedidos = $this->db->table('pedidos_de_compra')->get()->getResultArray();
+        $pedidos = $this->db->table('pedidos_de_compra')
+            ->select('pedidos_de_compra.*, clientes.nome AS nomeCliente, produtos.nome AS nomeProduto, produtos.valor as valorProdutoIndividual')
+            ->join('clientes', 'clientes.id = pedidos_de_compra.idCliente')
+            ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto')
+            ->get()->getResultArray();
         return [
             'message' => 'Listagem de pedidos',
             'statusCode' => 200,
             'PedidosDeCompras' => $pedidos
+        ];
+    }
+
+    public function mostrarUm(int $id)
+    {
+        $pedido = $this->buscarPedidoDeCompraPorId($id);
+        if (!$pedido) {
+            return [
+                'message' => 'Pedido não encontrado',
+                'statusCode' => 404
+            ];
+        }
+        return [
+            'message' => 'Pedido',
+            'statusCode' => 200,
+            'PedidosDeCompras' => $pedido
         ];
     }
 }

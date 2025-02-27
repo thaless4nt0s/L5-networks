@@ -81,4 +81,17 @@ class PedidosDeComprasController extends BaseController
             ])->setStatusCode(500);
         }
     }
+
+    public function mostrarUm(int $id)
+    {
+        try {
+            $resposta = $this->pedidosDeCompraRepository->mostrarUm($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao exibir pedidos de compras: ' . $e->getMessage(),
+                'statusCode' => 500
+            ])->setStatusCode(500);
+        }
+    }
 }

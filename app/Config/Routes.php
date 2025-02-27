@@ -32,4 +32,5 @@ $routes->group('pedidosDeCompra', function ($routes) {
     $routes->put('(:num)', 'PedidosDeComprasController::alterarPedidoDeCompra/$1');
     $routes->delete('(:num)', 'PedidosDeComprasController::removerPedidoDeCompra/$1');
     $routes->get('', 'PedidosDeComprasController::mostrarTodos');
+    $routes->get('(:num)', 'PedidosDeComprasController::mostrarUm/$1');
 });

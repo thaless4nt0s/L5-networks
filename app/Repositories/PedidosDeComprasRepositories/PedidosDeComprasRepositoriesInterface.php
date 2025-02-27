@@ -10,4 +10,5 @@ interface PedidosDeComprasRepositoriesInterface
     public function alterarPedidoDeCompra(int $id, array $dados);
     public function removerPedidoDeCompra(int $id);
     public function mostrarTodos();
+    public function mostrarUm(int $id);
 }
