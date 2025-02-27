@@ -85,8 +85,10 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         try {
             $dados['valor_compra'] = round($dados['quantidade'] * $produto['valor'], 2);
             $this->db->table('pedidos_de_compra')->insert($dados);
+            $idInserido = $this->db->insertID();
             return [
-                'Message' => 'Pedido Adicionado com Sucesso',
+                'pedido' => $this->buscarPedidoDeCompraPorId($idInserido),
+                'message' => 'Pedido Criado com sucesso',
                 'statusCode' => 200
             ];
         } catch (\Exception $e) {
@@ -152,8 +154,9 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
                 ->where('id', $id)
                 ->update($dados);
             return [
-                'Message' => 'Pedido atualizado com Sucesso !',
-                'statusCode' => 200
+                'message' => 'Pedido atualizado com Sucesso !',
+                'statusCode' => 200,
+                'pedido' => $this->buscarPedidoDeCompraPorId($id)
             ];
         } catch (\Exception $e) {
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
@@ -213,9 +216,9 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto')
             ->get()->getResultArray();
         return [
-            'message' => 'Listagem de pedidos',
+            'message' => 'Listagem de todos os pedidos',
             'statusCode' => 200,
-            'PedidosDeCompras' => $pedidos
+            'pedido' => $pedidos
         ];
     }
 
@@ -229,9 +232,9 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             ];
         }
         return [
-            'message' => 'Pedido',
+            'message' => 'Listagem De um Pedido',
             'statusCode' => 200,
-            'PedidosDeCompras' => $pedido
+            'pedido' => $pedido
         ];
     }
 }

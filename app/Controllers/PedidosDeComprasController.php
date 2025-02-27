@@ -9,6 +9,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 class PedidosDeComprasController extends BaseController
 {
     protected $pedidosDeCompraRepository;
+
     public function __construct()
     {
         $this->pedidosDeCompraRepository = new PedidosDeComprasRepository();
@@ -16,43 +17,87 @@ class PedidosDeComprasController extends BaseController
 
     public function adicionarPedidoDeCompra()
     {
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+
         $dados = [
-            'dia' => date('Y-m-d'), // Correção da formatação da data
-            'quantidade' => $this->request->getVar('quantidade'),
-            'idCliente' => $this->request->getVar('idCliente'),
-            'idProduto' => $this->request->getVar('idProduto'),
-            'status' => 'Em aberto' // Sempre passará 'Em aberto' quando se adiciona um pedido
+            'dia' => date('Y-m-d'), // Formato correto da data
+            'quantidade' => $input['parametros']['quantidade'] ?? null,
+            'idCliente' => $input['parametros']['idCliente'] ?? null,
+            'idProduto' => $input['parametros']['idProduto'] ?? null,
+            'status' => 'Em aberto'
         ];
 
         try {
             $resposta = $this->pedidosDeCompraRepository->adicionarPedidoDeCompra($dados);
-            return $this->response->setJSON($resposta);
+
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => $resposta['statusCode'],
+                    'mensagem' => $resposta['message']
+                ],
+                'retorno' => $resposta['pedido'] ?? null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao criar pedido de compra: ' . $e->getMessage(),
-                'statusCode' => 500
-            ])->setStatusCode(500);
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao criar pedido de compra: ' . $e->getMessage()
+                ],
+                'retorno' => null
+            ]);
         }
     }
 
     public function alterarPedidoDeCompra($id)
     {
+        $input = $this->request->getJSON(true);
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ]);
+        }
+
         $dados = [
-            'dia' => $this->request->getVar('dia'), // Correção da formatação da data
-            'quantidade' => $this->request->getVar('quantidade'),
-            'idCliente' => $this->request->getVar('idCliente'),
-            'idProduto' => $this->request->getVar('idProduto'),
-            'status' => $this->request->getVar('status') // Sempre passará 'Em aberto' quando se adiciona um pedido
+            'dia' => $input['parametros']['dia'] ?? null,
+            'quantidade' => $input['parametros']['quantidade'] ?? null,
+            'idCliente' => $input['parametros']['idCliente'] ?? null,
+            'idProduto' => $input['parametros']['idProduto'] ?? null,
+            'status' => $input['parametros']['status'] ?? 'Em aberto'
         ];
 
         try {
             $resposta = $this->pedidosDeCompraRepository->alterarPedidoDeCompra($id, $dados);
-            return $this->response->setJSON($resposta);
+
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => $resposta['statusCode'],
+                    'mensagem' => $resposta['message']
+                ],
+                'retorno' => $resposta['pedido'] ?? null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao atualizar pedido de compra: ' . $e->getMessage(),
-                'statusCode' => 500
-            ])->setStatusCode(500);
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao atualizar pedido de compra: ' . $e->getMessage()
+                ],
+                'retorno' => null
+            ]);
         }
     }
 
@@ -60,11 +105,21 @@ class PedidosDeComprasController extends BaseController
     {
         try {
             $resposta = $this->pedidosDeCompraRepository->removerPedidoDeCompra($id);
-            return $this->response->setJSON($resposta);
+
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => $resposta['statusCode'],
+                    'mensagem' => $resposta['message']
+                ],
+                'retorno' => $resposta['pedido'] ?? null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao remover pedido de compra: ' . $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao remover pedido de compra: ' . $e->getMessage()
+                ],
+                'retorno' => null
             ])->setStatusCode(500);
         }
     }
@@ -73,11 +128,21 @@ class PedidosDeComprasController extends BaseController
     {
         try {
             $resposta = $this->pedidosDeCompraRepository->mostrarTodos();
-            return $this->response->setJSON($resposta);
+
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => $resposta['statusCode'],
+                    'mensagem' => $resposta['message']
+                ],
+                'retorno' => $resposta['pedido'] ?? null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao exibir pedidos de compras: ' . $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao exibir pedidos de compras: ' . $e->getMessage()
+                ],
+                'retorno' => null
             ])->setStatusCode(500);
         }
     }
@@ -86,11 +151,21 @@ class PedidosDeComprasController extends BaseController
     {
         try {
             $resposta = $this->pedidosDeCompraRepository->mostrarUm($id);
-            return $this->response->setJSON($resposta);
+
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => $resposta['statusCode'],
+                    'mensagem' => $resposta['message']
+                ],
+                'retorno' => $resposta['pedido'] ?? null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao exibir pedidos de compras: ' . $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao exibir pedido de compra: ' . $e->getMessage()
+                ],
+                'retorno' => null
             ])->setStatusCode(500);
         }
     }
