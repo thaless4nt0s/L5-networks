@@ -40,13 +40,7 @@ class PedidosDeComprasController extends BaseController
         try {
             $resposta = $this->pedidosDeCompraRepository->adicionarPedidoDeCompra($dados);
 
-            return $this->response->setJSON([
-                'cabecalho' => [
-                    'status' => $resposta['statusCode'],
-                    'mensagem' => $resposta['message']
-                ],
-                'retorno' => $resposta['pedido'] ?? null
-            ]);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'cabecalho' => [
@@ -83,13 +77,7 @@ class PedidosDeComprasController extends BaseController
         try {
             $resposta = $this->pedidosDeCompraRepository->alterarPedidoDeCompra($id, $dados);
 
-            return $this->response->setJSON([
-                'cabecalho' => [
-                    'status' => $resposta['statusCode'],
-                    'mensagem' => $resposta['message']
-                ],
-                'retorno' => $resposta['pedido'] ?? null
-            ]);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'cabecalho' => [
@@ -106,13 +94,7 @@ class PedidosDeComprasController extends BaseController
         try {
             $resposta = $this->pedidosDeCompraRepository->removerPedidoDeCompra($id);
 
-            return $this->response->setJSON([
-                'cabecalho' => [
-                    'status' => $resposta['statusCode'],
-                    'mensagem' => $resposta['message']
-                ],
-                'retorno' => $resposta['pedido'] ?? null
-            ]);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'cabecalho' => [
@@ -128,14 +110,7 @@ class PedidosDeComprasController extends BaseController
     {
         try {
             $resposta = $this->pedidosDeCompraRepository->mostrarTodos();
-
-            return $this->response->setJSON([
-                'cabecalho' => [
-                    'status' => $resposta['statusCode'],
-                    'mensagem' => $resposta['message']
-                ],
-                'retorno' => $resposta['pedido'] ?? null
-            ]);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'cabecalho' => [
@@ -152,13 +127,7 @@ class PedidosDeComprasController extends BaseController
         try {
             $resposta = $this->pedidosDeCompraRepository->mostrarUm($id);
 
-            return $this->response->setJSON([
-                'cabecalho' => [
-                    'status' => $resposta['statusCode'],
-                    'mensagem' => $resposta['message']
-                ],
-                'retorno' => $resposta['pedido'] ?? null
-            ]);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'cabecalho' => [

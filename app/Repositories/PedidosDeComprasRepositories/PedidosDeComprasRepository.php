@@ -54,15 +54,21 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
 
         if (!$cliente) {
             return [
-                'message' => 'Cliente Não encontrado  !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Cliente não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
         if (!$produto) {
             return [
-                'message' => 'Produto Não encontrado  !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Produto não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
@@ -75,9 +81,11 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         // Executa a validação
         if (!$this->validation->run($dados)) {
             return [
-                'message' => 'Erro de validação',
-                'erro' => $this->validation->getErrors(),
-                'statusCode' => 400
+                'cabecalho' => [
+                    'mensagem' => 'Erro de validação ' . $this->validation->getErrors(),
+                    'status' => 400,
+                ],
+                'retorno' => null
             ];
         }
 
@@ -87,16 +95,20 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             $this->db->table('pedidos_de_compra')->insert($dados);
             $idInserido = $this->db->insertID();
             return [
-                'pedido' => $this->buscarPedidoDeCompraPorId($idInserido),
-                'message' => 'Pedido Criado com sucesso',
-                'statusCode' => 200
+                'cabecalho' => [
+                    'mensagem' => 'Pedido criado com sucesso',
+                    'status' => 200,
+                ],
+                'retorno' => $this->buscarPedidoDeCompraPorId($idInserido)
             ];
         } catch (\Exception $e) {
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
             return [
-                'message' => 'Erro ao adicionar pedido',
-                'erro' => $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao adicionar pedido ' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => $this->buscarPedidoDeCompraPorId($idInserido)
             ];
         }
     }
@@ -112,24 +124,33 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         $pedido = $this->buscarPedidoDeCompraPorId($id);
         if (!$pedido) {
             return [
-                'message' => 'Pedido não encontrado !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Pedido não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
         $cliente = $this->clienteRepository->buscarClientePorId($dados['idCliente']);
         if (!$cliente) {
             return [
-                'message' => 'Cliente Não encontrado !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Cliente não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
         $produto = $this->produtoRepository->buscarProdutoPorId($dados['idProduto']);
         if (!$produto) {
             return [
-                'message' => 'Produto Não encontrado !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Produto não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
@@ -142,9 +163,11 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         // Executa a validação
         if (!$this->validation->run($dados)) {
             return [
-                'message' => 'Erro de validação',
-                'erro' => $this->validation->getErrors(),
-                'statusCode' => 400
+                'cabecalho' => [
+                    'mensagem' => 'Erro de validação ' . $this->validation->getErrors(),
+                    'status' => 400,
+                ],
+                'retorno' => null
             ];
         }
 
@@ -154,17 +177,23 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
                 ->where('id', $id)
                 ->update($dados);
             return [
-                'message' => 'Pedido atualizado com Sucesso !',
-                'statusCode' => 200,
-                'pedido' => $this->buscarPedidoDeCompraPorId($id)
+                'cabecalho' => [
+                    'mensagem' => 'Pedido atualizado com sucesso',
+                    'status' => 200,
+                ],
+                'retorno' => $this->buscarPedidoDeCompraPorId($id)
             ];
+
         } catch (\Exception $e) {
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
             return [
-                'message' => 'Erro ao alterar pedido',
-                'erro' => $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao alterar pedido ' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => null
             ];
+
         }
     }
 
@@ -178,29 +207,41 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         $pedido = $this->buscarPedidoDeCompraPorId($id);
         if (!$pedido) {
             return [
-                'message' => 'Pedido não encontrado',
-                'statusCode' => 200
+                'cabecalho' => [
+                    'mensagem' => 'Pedido não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
         try {
             if (!$this->db->table('pedidos_de_compra')->where('id', $id)->delete()) {
                 return [
-                    'message' => 'Erro ao excluir Pedido',
-                    'statusCode' => '400'
+                    'cabecalho' => [
+                        'mensagem' => 'Erro ao excluir pedido',
+                        'status' => 400,
+                    ],
+                    'retorno' => null
                 ];
             }
 
             return [
-                'message' => 'Pedido excluido com sucesso !',
-                'statusCode' => 200
+                'cabecalho' => [
+                    'mensagem' => 'Pedido excluido com sucesso ',
+                    'status' => 200,
+                ],
+                'retorno' => null
             ];
         } catch (\Exception $e) {
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
             return [
-                'message' => 'Erro ao remover pedido',
-                'erro' => $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao remover pedido' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => null
             ];
+
         }
     }
 
@@ -216,9 +257,11 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto')
             ->get()->getResultArray();
         return [
-            'message' => 'Listagem de todos os pedidos',
-            'statusCode' => 200,
-            'pedido' => $pedidos
+            'cabecalho' => [
+                'mensagem' => 'Listagem de todos os pedidos',
+                'status' => 200,
+            ],
+            'retorno' => $pedidos
         ];
     }
 
@@ -227,14 +270,19 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
         $pedido = $this->buscarPedidoDeCompraPorId($id);
         if (!$pedido) {
             return [
-                'message' => 'Pedido não encontrado',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Pedido não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
         return [
-            'message' => 'Listagem De um Pedido',
-            'statusCode' => 200,
-            'pedido' => $pedido
+            'cabecalho' => [
+                'mensagem' => 'Listagem De um Pedido',
+                'status' => 200,
+            ],
+            'retorno' => $pedido
         ];
     }
 }
