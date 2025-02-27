@@ -55,4 +55,17 @@ class PedidosDeComprasController extends BaseController
             ])->setStatusCode(500);
         }
     }
+
+    public function removerPedidoDeCompra(int $id)
+    {
+        try {
+            $resposta = $this->pedidosDeCompraRepository->removerPedidoDeCompra($id);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao remover pedido de compra: ' . $e->getMessage(),
+                'statusCode' => 500
+            ])->setStatusCode(500);
+        }
+    }
 }

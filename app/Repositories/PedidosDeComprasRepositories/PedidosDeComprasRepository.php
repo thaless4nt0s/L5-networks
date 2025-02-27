@@ -157,4 +157,40 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
             ];
         }
     }
+
+    /**
+     * Remove um pedido
+     * @param int $id
+     * @return array{erro: string, message: string, statusCode: int|array{message: string, statusCode: int|string}|array{message: string, statusCode: int}}
+     */
+    public function removerPedidoDeCompra(int $id)
+    {
+        $pedido = $this->buscarPedidoDeCompraPorId($id);
+        if (!$pedido) {
+            return [
+                'message' => 'Pedido não encontrado',
+                'statusCode' => 200
+            ];
+        }
+        try {
+            if (!$this->db->table('pedidos_de_compra')->where('id', $id)->delete()) {
+                return [
+                    'message' => 'Erro ao excluir Pedido',
+                    'statusCode' => '400'
+                ];
+            }
+
+            return [
+                'message' => 'Pedido excluido com sucesso !',
+                'statusCode' => 200
+            ];
+        } catch (\Exception $e) {
+            // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
+            return [
+                'message' => 'Erro ao remover pedido',
+                'erro' => $e->getMessage(),
+                'statusCode' => 500
+            ];
+        }
+    }
 }
