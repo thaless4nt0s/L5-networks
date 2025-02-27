@@ -17,27 +17,55 @@ class ProdutoController extends BaseController
 
     public function adicionarProduto()
     {
-        $dados = [
-            'nome' => $this->request->getVar('nome'),
-            'valor' => $this->request->getVar('valor'),
-        ];
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
 
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+        $dados = [
+            'nome' => $input['parametros']['nome'] ?? null,
+            'valor' => isset($input['parametros']['valor'])
+                ? number_format($input['parametros']['valor'], 2, '.', '')
+                : null
+        ];
         try {
             $resposta = $this->produtoRepository->adicionarProduto($dados);
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao criar produto: ' . $e->getMessage(),
-                'statusCode' => 500
-            ])->setStatusCode(500);
+                'cabecalho' => [
+                    'statusCode' => 500,
+                    'mensagem' => 'Erro ao criar produto: ' . $e->getMessage(),
+                ],
+                'retorno' => null
+            ]);
         }
     }
 
     public function alterarProduto($id)
     {
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
         $dados = [
-            'nome' => $this->request->getVar('nome'),
-            'valor' => $this->request->getVar('valor'),
+            'nome' => $input['parametros']['nome'] ?? null,
+            'valor' => isset($input['parametros']['valor'])
+                ? number_format($input['parametros']['valor'], 2, '.', '')
+                : null
         ];
 
         try {
@@ -45,9 +73,9 @@ class ProdutoController extends BaseController
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
-                'message' => 'Erro ao criar produto: ' . $e->getMessage(),
+                'message' => 'Erro ao alterar produto: ' . $e->getMessage(),
                 'statusCode' => 500
-            ])->setStatusCode(500);
+            ]);
         }
     }
 
@@ -57,9 +85,13 @@ class ProdutoController extends BaseController
             $resposta = $this->produtoRepository->removerProduto($id);
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'message' => 'Erro ao remover produto: ' . $e->getMessage(),
-            ])->setStatusCode(500);
+            return [
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao remover produto: ' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => null
+            ];
         }
     }
 

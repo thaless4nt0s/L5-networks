@@ -42,16 +42,18 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
     {
         // Define as regras e mensagens de validação
         $this->validation->setRules(
-            $this->produtoModel->validationRules, // Regras de validação
-            $this->produtoModel->validationMessages // Mensagens de erro personalizadas
+            $this->produtoModel->getValidationRules(), // Regras de validação
+            $this->produtoModel->getValidationMessages() // Mensagens de erro personalizadas
         );
 
         // Executa a validação
         if (!$this->validation->run($dados)) {
             return [
-                'message' => 'Erro de validação',
-                'erro' => $this->validation->getErrors(),
-                'statusCode' => 400
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Erro de validação' . $this->validation->getErrors()
+                ],
+                'retorno' => null
             ];
         }
 
@@ -61,17 +63,21 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         } catch (\Exception $e) {
             // Se ocorrer um erro durante a inserção, retorna uma mensagem de erro
             return [
-                'message' => 'Erro ao adicionar produto',
-                'erro' => $e->getMessage(),
-                'statusCode' => 500
+                'cabecalho' => [
+                    'status' => 500,
+                    'mensagem' => 'Erro ao adicionar produto',
+                ],
+                'retorno' => null
             ];
         }
 
         // Retorna uma mensagem de sucesso
         return [
-            'message' => 'Produto criado com sucesso!',
-            'statusCode' => 200,
-            'produto' => $this->db->insertID() // Retorna o ID do produto inserido
+            'cabecalho' => [
+                'mensagem' => 'Produto criado com sucesso!',
+                'status' => 200,
+            ],
+            'retorno' => $this->buscarProdutoPorId($this->db->insertID())
         ];
     }
 
@@ -81,8 +87,11 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
 
         if (!$produto) {
             return [
-                'message' => 'Produto não encontrado',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Produto não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
         // Define as regras e mensagens de validação
@@ -94,9 +103,11 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         // Executa a validação
         if (!$this->validation->run($dados)) {
             return [
-                'message' => 'Erro de validação',
-                'erro' => $this->validation->getErrors(),
-                'statusCode' => 400
+                'cabecalho' => [
+                    'mensagem' => 'Erro de validação' . $this->validation->getErrors(),
+                    'status' => 400,
+                ],
+                'retorno' => null
             ];
         }
 
@@ -106,9 +117,11 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
 
         // Retorna uma mensagem de sucesso
         return [
-            'message' => 'Produto atualizado com sucesso!',
-            'statusCode' => 200,
-            'produto' => $produtoAtualizado // Retorna o ID do produto inserido
+            'cabecalho' => [
+                'mensagem' => 'Produto atualizado com sucesso!',
+                'status' => 200,
+            ],
+            'retorno' => $produtoAtualizado
         ];
     }
 
@@ -123,21 +136,30 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         $produto = $this->buscarProdutoPorId($id);
         if (!$produto) {
             return [
-                'message' => 'Produto não encontrado !',
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Produto não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
 
         if (!$this->db->table('produtos')->where('id', $id)->delete()) {
             return [
-                'message' => 'Erro ao remover produto, verifique novamente !',
-                'statusCode' => 400
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao remover produto, verifique novamente !',
+                    'status' => 400,
+                ],
+                'retorno' => null
             ];
         }
 
         return [
-            'message' => 'Produto removido com sucesso!',
-            'statusCode' => 200
+            'cabecalho' => [
+                'mensagem' => 'Produto removido com sucesso!',
+                'status' => 200,
+            ],
+            'retorno' => null
         ];
     }
 
@@ -150,9 +172,11 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         $produtos = $this->db->table('produtos')->get()->getResultArray();
 
         return [
-            'message' => 'Listagem de produtos',
-            'statusCode' => 200,
-            'produtos' => $produtos
+            'cabecalho' => [
+                'mensagem' => 'Listagem de produtos',
+                'status' => 200,
+            ],
+            'retorno' => $produtos
         ];
     }
     /**
@@ -165,14 +189,19 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
         $produto = $this->buscarProdutoPorId($id);
         if (!$produto) {
             return [
-                'message' => "Produto não encontrado",
-                'statusCode' => 404
+                'cabecalho' => [
+                    'mensagem' => 'Produto não encontrado',
+                    'status' => 404,
+                ],
+                'retorno' => null
             ];
         }
         return [
-            'message' => 'Produto',
-            'statusCode' => 200,
-            'produtos' => $produto
+            'cabecalho' => [
+                'mensagem' => 'Listagem de produtos',
+                'status' => 200,
+            ],
+            'retorno' => $produto
         ];
     }
 }
