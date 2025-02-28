@@ -98,11 +98,21 @@ class ProdutoController extends BaseController
     public function mostrarTodos()
     {
         try {
-            $resposta = $this->produtoRepository->mostrarTodos();
+            // Captura o número da página (se não for especificado, assume a página 1)
+            $page = $this->request->getVar('page') ?? 1;
+
+            // Captura os filtros da requisição (query string ou corpo)
+            $filtros = $this->request->getGet(); // Ou $this->request->getPost() para POST
+
+            // Chama o repositório, passando a página e os filtros
+            $resposta = $this->produtoRepository->mostrarTodos($page, $filtros);
+
+            // Retorna a resposta em JSON
             return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
+            // Em caso de erro, retorna uma mensagem de erro
             return $this->response->setJSON([
-                'message' => 'Erro ao remover produto: ' . $e->getMessage(),
+                'message' => 'Erro ao listar produtos: ' . $e->getMessage(),
             ])->setStatusCode(500);
         }
     }

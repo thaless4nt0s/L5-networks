@@ -164,21 +164,58 @@ class ProdutoRepository implements ProdutoRepositoriesInterface
     }
 
     /**
-     * Lista todos os produtos
-     * @return array{message: string, produtos: array, statusCode: int}
+     * Mostra todos os produtos
+     * @param int $page
+     * @param array $filtros
+     * @return array{cabecalho: array{mensagem: string, status: int, retorno: array}}
      */
-    public function mostrarTodos()
+    public function mostrarTodos(int $page = 1, array $filtros = [])
     {
-        $produtos = $this->db->table('produtos')->get()->getResultArray();
+        unset($filtros['page']);
+        // Carrega a biblioteca de paginação
+        $pager = \Config\Services::pager();
 
+        // Número de itens por página
+        $perPage = 2; // Ajuste conforme necessário
+
+        // Calcula o offset
+        $offset = ($page - 1) * $perPage;
+
+        // Inicia a consulta
+        $query = $this->db->table('produtos');
+
+        // Aplica os filtros
+        foreach ($filtros as $campo => $valor) {
+            if (!empty($valor)) {
+                $query->like($campo, $valor); // Filtra usando "LIKE" (pode ser ajustado para outros operadores)
+            }
+        }
+
+        // Executa a consulta com paginação
+        $produtos = $query->select('*')
+            ->limit($perPage, $offset)
+            ->get()
+            ->getResultArray();
+
+        // Total de registros filtrados (para calcular o número total de páginas)
+        $total = $query->countAllResults(false); // "false" para não resetar a consulta
+
+        // Configura a paginação
+        $pager->makeLinks($page, $perPage, $total);
+
+        // Retorna os dados filtrados e paginados
         return [
             'cabecalho' => [
                 'mensagem' => 'Listagem de produtos',
                 'status' => 200,
             ],
-            'retorno' => $produtos
+            'retorno' => [
+                'produtos' => $produtos,
+                'paginacao' => $pager->links() // Links de paginação
+            ]
         ];
     }
+
     /**
      * Retorna um produto
      * @param mixed $id
