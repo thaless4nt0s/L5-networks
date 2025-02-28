@@ -49,17 +49,15 @@ class Login extends BaseController
         try {
             $token = JWT::encode($payload, $key, 'HS256');
         } catch (\Exception $e) {
-            return $this->respond(['error' => 'Token generation failed: ' . $e->getMessage()], 500);
+            return $this->respond(['error' => 'erro ao gerar token: ' . $e->getMessage()], 500);
         }
 
-        $response = [
-            'message' => 'Login Successful',
-            'token' => $token
-        ];
-
         return $this->response->setJSON([
-            'response' => $response,
-            'statusCode' => 200
+            'cabecalho' => [
+                'message' => 'Login realizado com sucesso',
+                'status' => 200
+            ],
+            'retorno' => ['token' => $token]
         ]);
     }
 
