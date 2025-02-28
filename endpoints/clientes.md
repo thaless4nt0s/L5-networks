@@ -96,7 +96,7 @@
 
 ---
 
-**GET** `/clientes`
+**GET** `/clientes?nome={}&page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os clientes.
 
@@ -161,8 +161,10 @@
                     "status": null
                 }
             ]
-        }
+        },
+        "paginacao": "\n<nav aria-label=\"Page navigation\">\n\t<ul class=\"pagination\">\n\t\t\n\t\t\t\t\t<li class=\"active\">\n\t\t\t\t<a href=\"http://localhost:8080/index.php/clientes?nome=Alberto&page=1\">\n\t\t\t\t\t1\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/clientes?nome=Alberto&page=2\">\n\t\t\t\t\t2\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/clientes?nome=Alberto&page=3\">\n\t\t\t\t\t3\t\t\t\t</a>\n\t\t\t</li>\n\t\t\n\t\t\t\t\t<li>\n\t\t\t\t<a href=\"http://localhost:8080/index.php/clientes?nome=Alberto&page=4\" aria-label=\"Next\">\n\t\t\t\t\t<span aria-hidden=\"true\">Next</span>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<a href=\"http://localhost:8080/index.php/clientes?nome=Alberto&page=4\" aria-label=\"Last\">\n\t\t\t\t\t<span aria-hidden=\"true\">Last</span>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t</ul>\n</nav>\n"
     ]
+    
 }
 ```
 
