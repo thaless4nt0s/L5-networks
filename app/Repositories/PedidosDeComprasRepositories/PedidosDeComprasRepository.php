@@ -246,22 +246,64 @@ class PedidosDeComprasRepository implements PedidosDeComprasRepositoriesInterfac
     }
 
     /**
-     * Mostrar todas os pedidos de compras
-     * @return array{PedidosDeCompras: array, message: string, statusCode: int}
+     * Mostrar todos os pedidos
+     * @param int $page
+     * @param array $filtros
+     * @return array{cabecalho: array{mensagem: string, status: int, retorno: array}}
      */
-    public function mostrarTodos()
+    public function mostrarTodos(int $page = 1, array $filtros = [])
     {
-        $pedidos = $this->db->table('pedidos_de_compra')
+        // Carrega a biblioteca de paginação
+        $pager = \Config\Services::pager();
+
+        // Número de itens por página
+        $perPage = 2; // Ajuste conforme necessário
+
+        // Calcula o offset
+        $offset = ($page - 1) * $perPage;
+
+        // Inicia a consulta
+        $query = $this->db->table('pedidos_de_compra')
             ->select('pedidos_de_compra.*, clientes.nome AS nomeCliente, produtos.nome AS nomeProduto, produtos.valor as valorProdutoIndividual')
             ->join('clientes', 'clientes.id = pedidos_de_compra.idCliente')
-            ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto')
-            ->get()->getResultArray();
+            ->join('produtos', 'produtos.id = pedidos_de_compra.idProduto');
+
+        // Mapeia os filtros para as colunas corretas
+        $mapaFiltros = [
+            'nomeCliente' => 'clientes.nome', // Filtro "nomeCliente" aplicado à coluna "clientes.nome"
+            'nomeProduto' => 'produtos.nome', // Filtro "nomeProduto" aplicado à coluna "produtos.nome"
+            'status' => 'pedidos_de_compra.status', // Filtro "status" aplicado à coluna "pedidos_de_compra.status"
+            // Adicione outros filtros conforme necessário
+        ];
+
+        // Aplica os filtros (apenas se houver valores)
+        foreach ($filtros as $campo => $valor) {
+            if (!empty($valor) && isset($mapaFiltros[$campo])) {
+                $query->like($mapaFiltros[$campo], $valor); // Filtra usando "LIKE"
+            }
+        }
+
+        // Executa a consulta com paginação
+        $pedidos = $query->limit($perPage, $offset)
+            ->get()
+            ->getResultArray();
+
+        // Total de pedidos filtrados (para calcular o número total de páginas)
+        $totalPedidos = $query->countAllResults(false); // "false" para não resetar a consulta
+
+        // Configura a paginação
+        $pager->makeLinks($page, $perPage, $totalPedidos);
+
+        // Retorna os dados filtrados e paginados
         return [
             'cabecalho' => [
                 'mensagem' => 'Listagem de todos os pedidos',
                 'status' => 200,
             ],
-            'retorno' => $pedidos
+            'retorno' => [
+                'pedidos' => $pedidos,
+                'paginacao' => $pager->links() // Links de paginação
+            ]
         ];
     }
 
