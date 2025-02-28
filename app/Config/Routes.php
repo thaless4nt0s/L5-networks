@@ -6,8 +6,8 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
-$routes->group('admin/', function ($routes) {
-    $routes->post('criar', 'AdminController::adicionarAdministrador');
+$routes->group('admin', function ($routes) {
+    $routes->post('', 'AdminController::adicionarAdministrador');
     $routes->post("login", "Login::index");
 });
 

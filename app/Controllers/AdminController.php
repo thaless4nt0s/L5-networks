@@ -16,25 +16,28 @@ class AdminController extends BaseController
 
     public function adicionarAdministrador()
     {
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
+
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+
         $dados = [
-            'nome' => $this->request->getVar('nome'),
-            'email' => $this->request->getVar('email'),
-            'senha' => password_hash($this->request->getVar('senha'), PASSWORD_DEFAULT),
+            'nome' => $input['parametros']['nome'],
+            'email' => $input['parametros']['email'],
+            'senha' => password_hash($input['parametros']['senha'], PASSWORD_DEFAULT),
         ];
+
         // Criar administrador
         try {
-            $admin = $this->adminRepository->criarAdministrador($dados);
-            if ($admin) {
-                return $this->response->setJSON([
-                    'message' => 'Administrador criado com sucesso!',
-                    'statusCode' => 201, // Usar 201 para criação bem-sucedida
-                ]);
-            } else {
-                return $this->response->setJSON([
-                    'message' => 'Falha ao criar administrador',
-                    'statusCode' => 500 // Usar 500 para erros internos do servidor
-                ]);
-            }
+            $resposta = $this->adminRepository->criarAdministrador($dados);
+            return $this->response->setJSON($resposta);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'message' => 'Erro ao criar administrador: ' . $e->getMessage(),

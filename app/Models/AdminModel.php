@@ -29,9 +29,9 @@ class AdminModel extends Model
 
     // Validation
     protected $validationRules = [
-        'nome' => 'required|min_length[3]|max_length[50]',
+        'nome' => 'required|string|min_length[3]|max_length[50]',
         'email' => 'required|valid_email|max_length[70]',
-        'password' => 'required|min_length[8]'
+        'senha' => 'required|min_length[8]'
     ];
     protected $validationMessages = [
         'nome' => [
