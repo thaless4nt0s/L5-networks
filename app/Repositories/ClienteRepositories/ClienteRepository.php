@@ -201,52 +201,65 @@ class ClienteRepository implements ClienteRepositoryInterface
 
     /**
      * Mostra todos os clientes
+     * @param int $page
+     * @param array $filtros
      * @return array{cabecalho: array{mensagem: string, status: int, retorno: array}}
      */
-    public function mostrarTodos()
+    public function mostrarTodos(int $page = 1, array $filtros = [])
     {
-        // Consulta para obter clientes e seus pedidos
-        $resultados = $this->db->table('clientes')
-            ->select('clientes.id as cliente_id, clientes.nome, clientes.cpf, pedidos_de_compra.*')
-            ->join('pedidos_de_compra', 'pedidos_de_compra.idCliente = clientes.id', 'left')
+        unset($filtros['page']);
+        // Carrega a biblioteca de paginação
+        $pager = \Config\Services::pager();
+
+        // Número de clientes por página
+        $perPage = 2; // 2 clientes por página (ajuste conforme necessário)
+
+        // Calcula o offset
+        $offset = ($page - 1) * $perPage;
+
+        // Inicia a consulta para os clientes
+        $queryClientes = $this->db->table('clientes')
+            ->select('clientes.id as cliente_id, clientes.nome, clientes.cpf');
+
+        // Aplica os filtros (apenas se houver valores)
+        foreach ($filtros as $campo => $valor) {
+            if (!empty($valor)) {
+                $queryClientes->like($campo, $valor); // Filtra usando "LIKE"
+            }
+        }
+
+        // Executa a consulta de clientes com paginação
+        $clientes = $queryClientes->limit($perPage, $offset)
             ->get()
             ->getResultArray();
 
-        // Estrutura para agrupar pedidos por cliente
-        $clientes = [];
-        foreach ($resultados as $row) {
-            $cliente_id = $row['cliente_id'];
+        // Para cada cliente, busca seus pedidos
+        foreach ($clientes as &$cliente) {
+            $pedidos = $this->db->table('pedidos_de_compra')
+                ->select('*')
+                ->where('idCliente', $cliente['cliente_id'])
+                ->get()
+                ->getResultArray();
 
-            // Se o cliente ainda não foi adicionado ao array, adiciona
-            if (!isset($clientes[$cliente_id])) {
-                $clientes[$cliente_id] = [
-                    'nome' => $row['nome'],
-                    'cpf' => $row['cpf'],
-                    'id' => $cliente_id,
-                    'pedidos' => []
-                ];
-            }
-
-            // Adiciona o pedido ao array de pedidos do cliente
-            $clientes[$cliente_id]['pedidos'][] = [
-                'id' => $row['id'],
-                'dia' => $row['dia'],
-                'quantidade' => $row['quantidade'],
-                'valor_compra' => $row['valor_compra'],
-                'idProduto' => $row['idProduto'],
-                'status' => $row['status']
-            ];
+            $cliente['pedidos'] = $pedidos;
         }
 
-        // Converte o array associativo em uma lista de clientes
-        $clientes = array_values($clientes);
+        // Total de clientes (para calcular o número total de páginas)
+        $totalClientes = $queryClientes->countAllResults(false); // "false" para não resetar a consulta
 
+        // Configura a paginação
+        $pager->makeLinks($page, $perPage, $totalClientes);
+
+        // Retorna os dados paginados
         return [
             'cabecalho' => [
                 'mensagem' => 'Listagem de clientes',
                 'status' => 200,
             ],
-            'retorno' => $clientes
+            'retorno' => [
+                'clientes' => $clientes,
+                'paginacao' => $pager->links() // Links de paginação
+            ]
         ];
     }
 
