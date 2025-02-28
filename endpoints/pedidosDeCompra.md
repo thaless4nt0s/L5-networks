@@ -116,7 +116,7 @@
 
 ---
 
-**GET** `/pedidosDeCompra`
+**GET** `/pedidosDeCompra?nomeCliente={}&status={}&nomeProduto&?page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os pedidos.
 
@@ -128,32 +128,35 @@
         "mensagem": "Listagem de todos os pedidos",
         "status": 200
     },
-    "retorno": [
-        {
-            "id": "4",
-            "dia": "2025-02-27",
-            "quantidade": "30",
-            "valor_compra": "720.00",
-            "idCliente": "1",
-            "idProduto": "2",
-            "status": "Em aberto",
-            "nomeCliente": "João marcelo souza",
-            "nomeProduto": "café santa clara",
-            "valorProdutoIndividual": "24.00"
-        },
-        {
-            "id": "6",
-            "dia": "2025-02-27",
-            "quantidade": "30",
-            "valor_compra": "7799.70",
-            "idCliente": "1",
-            "idProduto": "3",
-            "status": "Em aberto",
-            "nomeCliente": "João marcelo souza",
-            "nomeProduto": "Frigideira anti aderente",
-            "valorProdutoIndividual": "124.00"
-        }
-    ]
+   "retorno": {
+        "pedidos": [
+            {
+                "id": "4",
+                "dia": "2025-02-27",
+                "quantidade": "30",
+                "valor_compra": "720.00",
+                "idCliente": "1",
+                "idProduto": "2",
+                "status": "Em aberto",
+                "nomeCliente": "João marcelo souza",
+                "nomeProduto": "café santa clara",
+                "valorProdutoIndividual": "24.00"
+            },
+            {
+                "id": "6",
+                "dia": "2025-02-27",
+                "quantidade": "30",
+                "valor_compra": "7799.70",
+                "idCliente": "1",
+                "idProduto": "3",
+                "status": "Em aberto",
+                "nomeCliente": "João marcelo souza",
+                "nomeProduto": "Frigideira anti aderente",
+                "valorProdutoIndividual": "124.00"
+            }
+        ],
+        "paginacao": "\n<nav aria-label=\"Page navigation\">\n\t<ul class=\"pagination\">\n\t\t\n\t\t\t\t\t<li class=\"active\">\n\t\t\t\t<a href=\"http://localhost:8080/index.php/pedidosDeCompra?nomeCliente=Jo%C3%A3o&page=1\">\n\t\t\t\t\t1\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/pedidosDeCompra?nomeCliente=Jo%C3%A3o&page=2\">\n\t\t\t\t\t2\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/pedidosDeCompra?nomeCliente=Jo%C3%A3o&page=3\">\n\t\t\t\t\t3\t\t\t\t</a>\n\t\t\t</li>\n\t\t\n\t\t\t\t\t<li>\n\t\t\t\t<a href=\"http://localhost:8080/index.php/pedidosDeCompra?nomeCliente=Jo%C3%A3o&page=4\" aria-label=\"Next\">\n\t\t\t\t\t<span aria-hidden=\"true\">Next</span>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<li>\n\t\t\t\t<a href=\"http://localhost:8080/index.php/pedidosDeCompra?nomeCliente=Jo%C3%A3o&page=4\" aria-label=\"Last\">\n\t\t\t\t\t<span aria-hidden=\"true\">Last</span>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t</ul>\n</nav>\n"
+    }
 }
 
 ```
