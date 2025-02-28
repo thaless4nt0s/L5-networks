@@ -94,7 +94,7 @@
 
 ---
 
-**GET** `/produtos`
+**GET** `/produtos?nome={}&page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os produtos.
 
@@ -106,23 +106,21 @@
         "mensagem": "Listagem de produtos",
         "status": 200
     },
-    "retorno": [
-        {
-            "id": "2",
-            "nome": "café santa clara",
-            "valor": "24.00"
-        },
-        {
-            "id": "3",
-            "nome": "Frigideira anti aderente",
-            "valor": "124.00"
-        },
-        {
-            "id": "8",
-            "nome": "Água crystal 250 ML",
-            "valor": "2.00"
-        }
-    ]
+    "retorno": {
+        "produtos": [
+            {
+                "id": "2",
+                "nome": "café santa clara",
+                "valor": "24.00"
+            },
+            {
+                "id": "7",
+                "nome": "café",
+                "valor": "10.00"
+            }
+        ],
+        "paginacao": "\n<nav aria-label=\"Page navigation\">\n\t<ul class=\"pagination\">\n\t\t\n\t\t\t\t\t<li class=\"active\">\n\t\t\t\t<a href=\"http://localhost:8080/index.php/produtos?nome=caf%C3%A9&page=1\">\n\t\t\t\t\t1\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/produtos?nome=caf%C3%A9&page=2\">\n\t\t\t\t\t2\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t\t\t<li >\n\t\t\t\t<a href=\"http://localhost:8080/index.php/produtos?nome=caf%C3%A9&page=3\">\n\t\t\t\t\t3\t\t\t\t</a>\n\t\t\t</li>\n\t\t\n\t\t\t</ul>\n</nav>\n"
+    }
 }
 
 ```
