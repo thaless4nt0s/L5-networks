@@ -13,17 +13,28 @@ class Login extends BaseController
 
     public function index()
     {
-        $adminModel = new AdminModel();
+        $input = $this->request->getJSON(true); // Obtém o JSON como array associativo
 
-        $email = $this->request->getVar('email');
-        $password = $this->request->getVar('senha');
+        if (!isset($input['parametros'])) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'status' => 400,
+                    'mensagem' => 'Parâmetros ausentes na requisição.'
+                ],
+                'retorno' => null
+            ])->setStatusCode(400);
+        }
+        $email = $input['parametros']['email'];
+        $senha = $input['parametros']['senha'];
+
+        $adminModel = new AdminModel();
 
         $user = $adminModel->where('email', $email)->first();
         if (is_null($user)) {
             return $this->respond(['error' => 'Usuário ou senha inválidos.'], 401);
         }
 
-        $pwd_verify = password_verify($password, $user['senha']);
+        $pwd_verify = password_verify($senha, $user['senha']);
         if (!$pwd_verify) {
             return $this->respond(['error' => 'Usuário ou senha inválidos.'], 401);
         }
