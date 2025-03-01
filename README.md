@@ -23,7 +23,7 @@ git clone https://github.com/thaless4nt0s/L5-networks.git
 cd L5-networks
 ```
 
-3. Executar o docker para o banco de dados:
+3. Executar o docker para o banco de dados, após isso, ele executará normalmente:
 
 ```
 docker-compose up-d
@@ -54,14 +54,22 @@ JWT_SECRET=
 ```
 php spark serve
 ```
+
+7. Para acessar o banco de dados, usuário e senha são estabelecidos no item 5:
+
+```
+http://localhost:8081/
+```
+
 ---
 
 # Documentações
 
-| Rotas                                         |
-| --------------------------------------------- |
-| [Clientes](endpoints/clientes.md)             |
-| [Produtos](endpoints/produtos.md)             |
-| [Pedidos](endpoints/pedidosDeCompra.md)       |
+| Rotas                                           |
+| ----------------------------------------------- |
+| [Clientes](endpoints/clientes.md)               |
+| [Produtos](endpoints/produtos.md)               |
+| [Pedidos](endpoints/pedidosDeCompra.md)         |
+| [Administradores](endpoints/administradores.md) |
 
 ---
