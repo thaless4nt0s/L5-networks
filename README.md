@@ -23,10 +23,27 @@ git clone https://github.com/thaless4nt0s/L5-networks.git
 cd L5-networks
 ```
 
-3. Executar o docker para o banco de dados, após isso, ele executará normalmente:
+3. Executar o docker para o banco de dados, após isso, após isso ele iniciará normalmente:
 
 ```
 docker-compose up-d
+```
+
+3.1. Caso não execute ou queira executar em outra ocasião
+
+```
+Para listar os containers
+->docker ps -a 
+
+Para iniciar um container em especifico
+->docker start NOME_DO_CONTAINER
+ou 
+->docker start CONTAINER_ID
+
+obs: Será necessário inicializar os containers para o mysql e para o phpmyadmin.
+
+Caso esteja usando o Docker Desktop, basta dar START nos containers que foram adicionados
+
 ```
 
 4. Instalando as dependências:
@@ -73,3 +90,13 @@ http://localhost:8081/
 | [Administradores](endpoints/administradores.md) |
 
 ---
+
+## Passo a passo no uso do sistema
+##### OBS os passos 3 e 4 podem ser realizados na ordem inversa
+
+1. Criar uma conta - [Administradores](endpoints/administradores.md)
+2. Realizar Login - [Administradores](endpoints/administradores.md)
+3. Criar um Produto - [Produtos](endpoints/produtos.md) 
+4. Criar um Cliente - [Clientes](endpoints/clientes.md) 
+5. Criar um Pedido - [Pedidos](endpoints/pedidosDeCompra.md) 
+6. Dar baixa em um pedido (alterar dados) - [Pedidos](endpoints/pedidosDeCompra.md) 
