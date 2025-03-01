@@ -97,4 +97,30 @@ class AdminController extends BaseController
             ]);
         }
     }
+
+    public function mostrarTodos()
+    {
+        try {
+            // Captura o número da página (se não for especificado, assume a página 1)
+            $page = $this->request->getVar('page') ?? 1;
+
+            // Captura os filtros da requisição (query string ou corpo)
+            $filtros = $this->request->getGet(); // Ou $this->request->getPost() para POST
+
+            // Chama o repositório, passando a página e os filtros
+            $resposta = $this->adminRepository->mostrarTodos($page, $filtros);
+
+            // Retorna a resposta em JSON
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            // Em caso de erro, retorna uma mensagem de erro
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao exibir administradores: ' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => null
+            ]);
+        }
+    }
 }

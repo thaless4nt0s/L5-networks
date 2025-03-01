@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\AdminController;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -11,6 +12,7 @@ $routes->group('admin', function ($routes) {
     $routes->post("login", "Login::index");
     $routes->put('(:num)', 'AdminController::alterarDadosDoAdministrador/$1', ['filter' => 'jwtAuth']);
     $routes->delete('(:num)', 'AdminController::removerAdministrador/$1', ['filter' => 'jwtAuth']);
+    $routes->get('', 'AdminController::mostrarTodos');
 });
 
 $routes->group('clientes', ['filter' => 'jwtAuth'], function ($routes) {

@@ -192,4 +192,56 @@ class AdminRepository implements AdminRepositoryInterface
         // Compara os IDs
         return $loggedInUserId === $userId;
     }
+
+    /**
+     * Mostra todos os administradores
+     * @param int $page
+     * @param array $filtros
+     * @return array{cabecalho: array{mensagem: string, status: int, retorno: array|null}}
+     */
+    public function mostrarTodos(int $page, array $filtros)
+    {
+        unset($filtros['page']);
+        // Carrega a biblioteca de paginação
+        $pager = \Config\Services::pager();
+
+        // Número de admins por página
+        $perPage = 2; // 2 admins por página (ajuste conforme necessário)
+
+        // Calcula o offset
+        $offset = ($page - 1) * $perPage;
+
+        // Inicia a consulta para os admins
+        $queryAdmins = $this->db->table('admins')
+            ->select('nome, email');
+
+        // Aplica os filtros (apenas se houver valores)
+        foreach ($filtros as $campo => $valor) {
+            if (!empty($valor)) {
+                $queryAdmins->like($campo, $valor); // Filtra usando "LIKE"
+            }
+        }
+        // Executa a consulta de admins com paginação
+        $admins = $queryAdmins->limit($perPage, $offset)
+            ->get()
+            ->getResultArray();
+
+        // Total de admins (para calcular o número total de páginas)
+        $totalAdmins = $queryAdmins->countAllResults(false); // "false" para não resetar a consulta
+
+        // Configura a paginação
+        $pager->makeLinks($page, $perPage, $totalAdmins);
+
+        // Retorna os dados paginados
+        return [
+            'cabecalho' => [
+                'mensagem' => 'Listagem de admins',
+                'status' => 200,
+            ],
+            'retorno' => [
+                'admins' => $admins,
+                'paginacao' => $pager->links() // Links de paginação
+            ]
+        ];
+    }
 }

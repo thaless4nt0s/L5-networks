@@ -10,4 +10,5 @@ interface AdminRepositoryInterface
     public function criarAdministrador(array $dados);
     public function alterarDadosDoAministrador(int $id, array $dados, RequestInterface $request);
     public function removerAdministrador(int $id, RequestInterface $request);
+    public function mostrarTodos(int $page, array $filtros);
 }
