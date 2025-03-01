@@ -123,4 +123,20 @@ class AdminController extends BaseController
             ]);
         }
     }
+
+    public function mostrarUm($id)
+    {
+        try {
+            $response = $this->adminRepository->mostrarUm($id);
+            return $this->response->setJSON($response);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'cabecalho' => [
+                    'mensagem' => 'Erro ao exibir administrador: ' . $e->getMessage(),
+                    'status' => 500,
+                ],
+                'retorno' => null
+            ]);
+        }
+    }
 }

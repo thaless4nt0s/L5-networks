@@ -11,4 +11,5 @@ interface AdminRepositoryInterface
     public function alterarDadosDoAministrador(int $id, array $dados, RequestInterface $request);
     public function removerAdministrador(int $id, RequestInterface $request);
     public function mostrarTodos(int $page, array $filtros);
+    public function mostrarUm(int $id);
 }

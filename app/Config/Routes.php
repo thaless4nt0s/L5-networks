@@ -13,6 +13,7 @@ $routes->group('admin', function ($routes) {
     $routes->put('(:num)', 'AdminController::alterarDadosDoAdministrador/$1', ['filter' => 'jwtAuth']);
     $routes->delete('(:num)', 'AdminController::removerAdministrador/$1', ['filter' => 'jwtAuth']);
     $routes->get('', 'AdminController::mostrarTodos');
+    $routes->get('(:num)', 'AdminController::mostrarUm/$1');
 });
 
 $routes->group('clientes', ['filter' => 'jwtAuth'], function ($routes) {

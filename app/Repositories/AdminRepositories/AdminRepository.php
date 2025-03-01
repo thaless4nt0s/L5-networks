@@ -244,4 +244,26 @@ class AdminRepository implements AdminRepositoryInterface
             ]
         ];
     }
+
+    public function mostrarUm(int $id)
+    {
+        $admin = $this->buscarAdministradorPorId($id);
+        if (!$admin) {
+            return [
+                'cabecalho' => [
+                    'mensagem' => 'Administrador não encontrado',
+                    'status' => 404
+                ],
+                'retorno' => null
+            ];
+        }
+
+        return [
+            'cabecalho' => [
+                'mensagem' => 'Administrador',
+                'status' => 200
+            ],
+            'retorno' => $admin
+        ];
+    }
 }
