@@ -24,6 +24,7 @@ class Login extends BaseController
                 'retorno' => null
             ])->setStatusCode(400);
         }
+
         $email = $input['parametros']['email'];
         $senha = $input['parametros']['senha'];
 
@@ -55,6 +56,7 @@ class Login extends BaseController
             "iat" => $iat, //Time the JWT issued at
             "exp" => $exp, // Expiration time of token
             "email" => $user['email'],
+            "id" => $user['id'] // Adiciona o ID do usuário ao payload
         );
 
         try {
@@ -71,5 +73,4 @@ class Login extends BaseController
             'retorno' => ['token' => $token]
         ]);
     }
-
 }
