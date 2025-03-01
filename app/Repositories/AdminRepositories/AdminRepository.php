@@ -133,6 +133,50 @@ class AdminRepository implements AdminRepositoryInterface
         ];
     }
 
+    /**
+     * Remove um administrador
+     * @param int $id
+     * @param \CodeIgniter\HTTP\RequestInterface $request
+     * @return array{cabecalho: array{mensagem: string, status: int, retorno: null}}
+     */
+    public function removerAdministrador(int $id, RequestInterface $request)
+    {
+        // Valida se o usuário logado é o mesmo do ID passado
+        if (!$this->validateUser($request, $id)) {
+            return [
+                'cabecalho' => [
+                    'mensagem' => 'Acesso negado: você não tem permissão para alterar este administrador.',
+                    'status' => 403,
+
+                ],
+                'retorno' => null
+            ];
+        }
+
+        $admin = $this->buscarAdministradorPorId($id);
+
+        if (!$admin) {
+            return [
+                'cabecalho' => [
+                    'mensagem' => 'Administrador não encontrado',
+                    'status' => 404
+                ],
+                'retorno' => null
+            ];
+        }
+
+        $this->db->table('admins')
+            ->where('id', $id)
+            ->delete();
+
+        return [
+            'cabecalho' => [
+                'mensagem' => 'Administrador excluido com sucesso',
+                'status' => 200
+            ],
+            'retorno' => null
+        ];
+    }
 
     /**
      * Valida se o usuário logado é o mesmo usuário que será manipulado na rota

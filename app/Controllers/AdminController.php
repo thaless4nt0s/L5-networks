@@ -84,4 +84,17 @@ class AdminController extends BaseController
             ]);
         }
     }
+
+    public function removerAdministrador($id)
+    {
+        try {
+            $resposta = $this->adminRepository->removerAdministrador($id, $this->request);
+            return $this->response->setJSON($resposta);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'message' => 'Erro ao remover um administrador: ' . $e->getMessage(),
+                'statusCode' => 500
+            ]);
+        }
+    }
 }

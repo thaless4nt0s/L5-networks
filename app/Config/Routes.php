@@ -10,6 +10,7 @@ $routes->group('admin', function ($routes) {
     $routes->post('', 'AdminController::adicionarAdministrador');
     $routes->post("login", "Login::index");
     $routes->put('(:num)', 'AdminController::alterarDadosDoAdministrador/$1', ['filter' => 'jwtAuth']);
+    $routes->delete('(:num)', 'AdminController::removerAdministrador/$1', ['filter' => 'jwtAuth']);
 });
 
 $routes->group('clientes', ['filter' => 'jwtAuth'], function ($routes) {
