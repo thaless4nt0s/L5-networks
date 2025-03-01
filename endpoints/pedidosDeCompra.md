@@ -3,6 +3,7 @@
 **POST** `/pedidosDeCompra`
 
 - **Descrição**: Endpoint responsável por criar um pedido de compra.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -51,6 +52,7 @@
 **PUT** `/pedidosDeCompra/:idPedidosDeCompra`
 
 - **Descrição**: Endpoint responsável por atualizar um pedido de compra.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -101,6 +103,7 @@
 **DELETE** `/pedidosDeCompra/:idPedidosDeCompra`
 
 - **Descrição**: Endpoint responsável por remover um pedido de compra.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -119,6 +122,7 @@
 **GET** `/pedidosDeCompra?nomeCliente={}&status={}&nomeProduto&?page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os pedidos.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -166,6 +170,7 @@
 **GET** `/pedidosDeCompra/:idPedidosDeCompra`
 
 - **Descrição**: Endpoint responsável por mostrar um pedido em específico.
+- **Autenticação**: Necessário
 
 **Response**:
 

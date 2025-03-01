@@ -3,6 +3,7 @@
 **POST** `/clientes`
 
 - **Descrição**: Endpoint responsável por criar um cliente.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -42,6 +43,7 @@
 **PUT** `/clientes/:idCliente`
 
 - **Descrição**: Endpoint responsável por atualizar um cliente.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -81,6 +83,7 @@
 **DELETE** `/clientes/:idCliente`
 
 - **Descrição**: Endpoint responsável por remover um cliente.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -99,6 +102,7 @@
 **GET** `/clientes?nome={}&page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os clientes.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -173,6 +177,7 @@
 **GET** `/clientes/:idCliente`
 
 - **Descrição**: Endpoint responsável por mostrar um cliente em específico.
+- **Autenticação**: Necessário
 
 **Response**:
 

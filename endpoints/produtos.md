@@ -3,6 +3,7 @@
 **POST** `/produtos`
 
 - **Descrição**: Endpoint responsável por criar um produto.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -41,6 +42,7 @@
 **PUT** `/produtos/:idProduto`
 
 - **Descrição**: Endpoint responsável por atualizar um produto.
+- **Autenticação**: Necessário
 
 **Query**:
 
@@ -79,6 +81,7 @@
 **DELETE** `/produtos/:idProduto`
 
 - **Descrição**: Endpoint responsável por remover um produto.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -97,6 +100,7 @@
 **GET** `/produtos?nome={}&page={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os produtos.
+- **Autenticação**: Necessário
 
 **Response**:
 
@@ -130,6 +134,7 @@
 **GET** `/produtos/:idProduto`
 
 - **Descrição**: Endpoint responsável por mostrar um produto em específico.
+- **Autenticação**: Necessário
 
 **Response**:
 
